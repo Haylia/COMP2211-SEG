@@ -1,11 +1,7 @@
 package uk.ac.soton.comp2211.scenes;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -20,15 +16,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp2211.App;
-import uk.ac.soton.comp2211.logic.SQLExecutor;
 import uk.ac.soton.comp2211.logic.Switcher;
 import uk.ac.soton.comp2211.ui.AppWindow;
 import uk.ac.soton.comp2211.ui.GamePane;
+
+import java.io.File;
 
 
 public class MenuScene extends BaseScene {
@@ -96,6 +91,16 @@ public class MenuScene extends BaseScene {
     vbox.setAlignment(Pos.CENTER);
     vbox.setSpacing(100);
 
+    //VBox to display the file names
+    var fileBox = new VBox();
+    mainPane.setBottom(fileBox);
+    BorderPane.setAlignment(fileBox, Pos.CENTER);
+    fileBox.setAlignment(Pos.CENTER);
+    fileBox.setSpacing(10);
+    var importLabel = new Label("Imported Files");
+    importLabel.setUnderline(true);
+    fileBox.getChildren().add(importLabel);
+
     vbox.getChildren().addAll(selectedImage, hbox);
 
     //
@@ -111,6 +116,9 @@ public class MenuScene extends BaseScene {
         // Add progress indicator to stackPane and set size
         stackPane.getChildren().add(progressIndicator);
         progressIndicator.setMaxSize(appWindow.getWidth()/4,appWindow.getWidth()/4);
+
+        // Add the selected file to the list of files imported
+        fileBox.getChildren().add(new Label(selectedFile.getName()));
 
         // Run the calculations on a background thread to keep the application responsive
         new Thread(() -> {
